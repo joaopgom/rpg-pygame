@@ -1,4 +1,6 @@
+# -*- encoding: utf-8 -*-
 import pygame
+import image
 
 def create_screen(width, height):
     
@@ -8,3 +10,4 @@ def create_screen(width, height):
     return _screen
 
 screen = create_screen(800, 608)
+texture_manager = image.Image()
