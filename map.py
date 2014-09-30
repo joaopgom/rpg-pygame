@@ -63,8 +63,8 @@ class Map():
         
                 
     def draw_map(self):
-        for x in range(19):
-            for y in range(25):
+        for x in range(30):
+            for y in range(30):
                 self.tiles[x][y].draw(x, y, self.camera)
     
     def set_camera(self, x, y):

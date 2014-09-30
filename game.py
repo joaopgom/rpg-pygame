@@ -40,7 +40,7 @@ class Game():
                     self.player_input(pygame.key.get_pressed())            
             self.map.draw_map()
             pygame.display.update()
-            self.time.tick(40)
+            self.time.tick(45)
 
 if __name__ == '__main__':
     pygame.init()
