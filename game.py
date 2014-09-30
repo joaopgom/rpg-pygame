@@ -17,29 +17,30 @@ class Game():
     
     def player_input(self, key_pressed):
         if key_pressed[K_LEFT]:
-            self.camera_effect(6, 0)
+            self.camera_effect(3, 0)
         elif key_pressed[K_RIGHT]:
-            self.camera_effect(-6, 0)
+            self.camera_effect(-3, 0)
         elif key_pressed[K_UP]:
-            self.camera_effect(0, 6)
+            self.camera_effect(0, 3)
         elif key_pressed[K_DOWN]:
-            self.camera_effect(0, -6)
-        self.map.load_maptiles()
+            self.camera_effect(0, -3)
+        #self.map.load_maptiles()
     
     def camera_effect(self, x_axis, y_axis):
         self.map.set_camera(x_axis, y_axis)
     
     def main_loop(self):
+        pygame.key.set_repeat(1, 10)
         while True:
             for ev in event.get():
                 if ev.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 elif ev.type == pygame.KEYDOWN:
-                    self.player_input(pygame.key.get_pressed())
+                    self.player_input(pygame.key.get_pressed())            
             self.map.draw_map()
-            pygame.display.flip()
-            self.time.tick(60)
+            pygame.display.update()
+            self.time.tick(40)
 
 if __name__ == '__main__':
     pygame.init()

@@ -20,10 +20,10 @@ class MapTile():
         self.backg_img_x = None
         self.backg_img_y = None
         
-    def draw(self, x, y):
+    def draw(self, x, y, camera):
         if self.backg:
-            global_data.screen.blit(global_data.texture_manager.textures[self.name+'_back'][0], self.pos)            
-        global_data.screen.blit(global_data.texture_manager.textures[self.name][0], self.pos, self.rect)
+            global_data.screen.blit(global_data.texture_manager.textures[self.name+'_back'][0], (self.pos[0]+camera[0], self.pos[1]+camera[1]))            
+        global_data.screen.blit(global_data.texture_manager.textures[self.name][0], (self.pos[0]+camera[0], self.pos[1]+camera[1]), self.rect)
         
 class Map():
     def __init__(self, name):
@@ -65,7 +65,7 @@ class Map():
     def draw_map(self):
         for x in range(19):
             for y in range(25):
-                self.tiles[x][y].draw(x, y)
+                self.tiles[x][y].draw(x, y, self.camera)
     
     def set_camera(self, x, y):
         if x > 0 and self.camera[0] < 0:            
