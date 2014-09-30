@@ -3,6 +3,7 @@ import sys
 import pygame
 from pygame import time
 from pygame import event
+from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
 from global_data import screen
 from map import Map
 
@@ -13,7 +14,21 @@ class Game():
         self.maps = []
         self.map = Map('WORLD_MAP')
         self.time = time.Clock()
-        
+    
+    def player_input(self, key_pressed):
+        if key_pressed[K_LEFT]:
+            self.camera_effect(6, 0)
+        elif key_pressed[K_RIGHT]:
+            self.camera_effect(-6, 0)
+        elif key_pressed[K_UP]:
+            self.camera_effect(0, 6)
+        elif key_pressed[K_DOWN]:
+            self.camera_effect(0, -6)
+        self.map.load_maptiles()
+    
+    def camera_effect(self, x_axis, y_axis):
+        self.map.set_camera(x_axis, y_axis)
+    
     def main_loop(self):
         while True:
             for ev in event.get():
@@ -21,10 +36,10 @@ class Game():
                     pygame.quit()
                     sys.exit()
                 elif ev.type == pygame.KEYDOWN:
-                    print 'keydown mortal!!!'
+                    self.player_input(pygame.key.get_pressed())
             self.map.draw_map()
             pygame.display.flip()
-            self.time.tick(30)
+            self.time.tick(60)
 
 if __name__ == '__main__':
     pygame.init()
