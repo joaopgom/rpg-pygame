@@ -34,7 +34,7 @@ class Map():
         self.map_width = MAPS_LIST[self.name][2]
         self.map_height = MAPS_LIST[self.name][3]
         self.tiles = [[MapTile() for i in range(self.map_width)] for j in range(self.map_height)]
-        self.collisions = [[pygame.Rect(0,0,0,0) for i in range(19)] for j in range(25)]
+        self.collisions = [[pygame.Rect(0,0,0,0) for i in range(self.map_height)] for j in range(self.map_width)]
         self.camera = [0, 0]
         self.load_maptiles()
         
@@ -48,9 +48,9 @@ class Map():
                 self.tiles[x][y].can_walk = line_data[1]                
                 self.tiles[x][y].pos_img_x = int(line_data[2]) 
                 self.tiles[x][y].pos_img_y = int(line_data[3])
-                self.tiles[x][y].pos = (int(line_data[4]) + self.camera[0], int(line_data[5]) + self.camera[1])     
-                #if self.tiles[x][y].name not in global_data.texture_manager.textures:
-                global_data.texture_manager.load_texture(self.tiles[x][y].name, 'images/'+line_data[6])
+                self.tiles[x][y].pos = (int(line_data[4]) + self.camera[0], int(line_data[5]) + self.camera[1])
+                if self.tiles[x][y].name not in global_data.texture_manager.textures:
+                    global_data.texture_manager.load_texture(self.tiles[x][y].name, 'images/'+line_data[6])
                 
                 if len(line_data) > 7:
                     global_data.texture_manager.load_texture(self.tiles[x][y].name+'_back', 'images/'+line_data[9])
@@ -66,17 +66,22 @@ class Map():
         for x in range(30):
             for y in range(30):
                 self.tiles[x][y].draw(x, y, self.camera)
+
+    def move_camera(self, x, y):
+        if x > 0 and self.camera[0] < 0 or x < 0 and (800 - (self.map_width*32)) < self.camera[0]:
+            return True
+        elif y > 0 and self.camera[1] < 0 or y < 0 and (800 - (self.map_height*32)) < self.camera[1]:
+            return True
+        return False
     
     def set_camera(self, x, y):
-        if x > 0 and self.camera[0] < 0:            
+        if x > 0 and self.camera[0] < 0 or x < 0 and (800 - (self.map_width*32)) < self.camera[0]:
             self.camera[0] = (self.camera[0] + x)
-        elif x < 0 and (800 - (self.map_width*32)) < self.camera[0]:            
-            self.camera[0] = (self.camera[0] + x)
-        
-        if y > 0 and self.camera[1] < 0:            
+        #elif :            
+        #    self.camera[0] = (self.camera[0] + x)
+
+        if y > 0 and self.camera[1] < 0 or y < 0 and (800 - (self.map_height*32)) < self.camera[1]:
             self.camera[1] = (self.camera[1] + y)
-        elif y < 0 and (800 - (self.map_height*32)) < self.camera[1]:            
-            self.camera[1] = (self.camera[1] + y)
-            
-        #self.camera[1] += y
+        #elif y < 0 and (800 - (self.map_height*32)) < self.camera[1]:
+        #    self.camera[1] = (self.camera[1] + y)
         

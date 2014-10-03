@@ -180,7 +180,7 @@ GRASS;True;0;0;896;160;grass.jpg
 GRASS;True;0;0;928;160;grass.jpg
 GRASS;True;0;0;0;192;grass.jpg
 GRASS;True;0;0;32;192;grass.jpg
-WORLD_OBJECTS_1;True;320;0;64;192;WORLD_MAP.png;64;32;grass.jpg
+WORLD_OBJECTS;True;320;0;64;192;WORLD_MAP.png;64;32;grass.jpg
 GRASS;True;0;0;96;192;grass.jpg
 GRASS;True;0;0;128;192;grass.jpg
 GRASS;True;0;0;160;192;grass.jpg
@@ -446,7 +446,7 @@ GRASS;True;0;0;768;448;grass.jpg
 GRASS;True;0;0;800;448;grass.jpg
 GRASS;True;0;0;832;448;grass.jpg
 GRASS;True;0;0;864;448;grass.jpg
-GRASS;True;0;0;896;448;grass.jpg
+WORLD_OBJECTS;True;480;160;896;448;WORLD_MAP.png;64;32;grass.jpg
 GRASS;True;0;0;928;448;grass.jpg
 GRASS;True;0;0;0;480;grass.jpg
 GRASS;True;0;0;32;480;grass.jpg
@@ -476,7 +476,7 @@ GRASS;True;0;0;768;480;grass.jpg
 GRASS;True;0;0;800;480;grass.jpg
 GRASS;True;0;0;832;480;grass.jpg
 GRASS;True;0;0;864;480;grass.jpg
-GRASS;True;0;0;896;480;grass.jpg
+WORLD_OBJECTS;True;480;192;896;480;WORLD_MAP.png;64;32;grass.jpg
 GRASS;True;0;0;928;480;grass.jpg
 GRASS;True;0;0;0;512;grass.jpg
 GRASS;True;0;0;32;512;grass.jpg

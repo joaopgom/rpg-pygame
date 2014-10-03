@@ -6,10 +6,11 @@ from pygame import event
 from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
 from global_data import screen
 from map import Map
+from player import Player
 
 class Game():
     def __init__(self):
-        self.player = None
+        self.player = Player('CLOUD')
         self.team = None    
         self.maps = []
         self.map = Map('WORLD_MAP')
@@ -24,10 +25,29 @@ class Game():
             self.camera_effect(0, 3)
         elif key_pressed[K_DOWN]:
             self.camera_effect(0, -3)
-        #self.map.load_maptiles()
     
     def camera_effect(self, x_axis, y_axis):
-        self.map.set_camera(x_axis, y_axis)
+        if self.map.move_camera(x_axis, y_axis):
+            self.map.set_camera(x_axis, y_axis)
+        else:
+            x_axis = x_axis*(-1)
+            y_axis = y_axis*(-1)
+            if x_axis != 0:
+                if x_axis > 0:
+                    if self.player.position[0] + x_axis > (800-25):                 
+                        x_axis = 0
+                else:
+                    if self.player.position[0] + x_axis + 25 < 25:                        
+                        x_axis = 0
+
+            if y_axis != 0:
+                if y_axis > 0:
+                    if self.player.position[1] + y_axis > (608-38):                 
+                        y_axis = 0
+                else:
+                    if self.player.position[1] + y_axis + 38 < 38:                        
+                        y_axis = 0
+            self.player.move_player(x_axis, y_axis)
     
     def main_loop(self):
         pygame.key.set_repeat(1, 10)
@@ -39,6 +59,7 @@ class Game():
                 elif ev.type == pygame.KEYDOWN:
                     self.player_input(pygame.key.get_pressed())            
             self.map.draw_map()
+            self.player.draw()
             pygame.display.update()
             self.time.tick(45)
 

@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 import pygame
-import image
+import image 
 
 def create_screen(width, height):
     
