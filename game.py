@@ -27,27 +27,36 @@ class Game():
             self.camera_effect(0, -3)
     
     def camera_effect(self, x_axis, y_axis):
-        if self.map.move_camera(x_axis, y_axis):
-            self.map.set_camera(x_axis, y_axis)
-        else:
-            x_axis = x_axis*(-1)
-            y_axis = y_axis*(-1)
-            if x_axis != 0:
-                if x_axis > 0:
-                    if self.player.position[0] + x_axis > (800-25):                 
-                        x_axis = 0
-                else:
-                    if self.player.position[0] + x_axis + 25 < 25:                        
-                        x_axis = 0
+        self.player.walk_change_sprite(x_axis, y_axis)
 
-            if y_axis != 0:
-                if y_axis > 0:
-                    if self.player.position[1] + y_axis > (608-38):                 
-                        y_axis = 0
-                else:
-                    if self.player.position[1] + y_axis + 38 < 38:                        
-                        y_axis = 0
-            self.player.move_player(x_axis, y_axis)
+        #print self.player.position[0]+x_axis+self.map.camera[0],  self.player.position[1]+y_axis+self.map.camera[1] 
+
+        player_x, player_y = self.player.position[0]+x_axis, self.player.position[1]+y_axis
+        print self.player.position[0]+x_axis+self.map.camera[0], self.player.position[1]+y_axis+self.map.camera[1]
+        #print int(player_x/self.map.map_width), int(player_y/self.map.map_height)
+        if self.map.tiles[int(player_x/self.map.map_width)][int(player_y/self.map.map_height)].can_walk:
+            if self.map.move_camera(x_axis, y_axis):
+                self.map.set_camera(x_axis, y_axis)
+            else:
+                x_axis = x_axis*(-1)
+                y_axis = y_axis*(-1)
+                if x_axis != 0:
+                    if x_axis > 0:
+                        if self.player.position[0] + x_axis > (800-25):
+                            x_axis = 0
+                    else:
+                        if self.player.position[0] + x_axis + 25 < 25:
+                            x_axis = 0
+
+                if y_axis != 0:
+                    if y_axis > 0:
+                        if self.player.position[1] + y_axis > (608-38):
+                            y_axis = 0
+                    else:
+                        if self.player.position[1] + y_axis + 38 < 38:
+                            y_axis = 0
+    
+                self.player.move_player(x_axis, y_axis)
     
     def main_loop(self):
         pygame.key.set_repeat(1, 10)

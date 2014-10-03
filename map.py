@@ -22,7 +22,9 @@ class MapTile():
         
     def draw(self, x, y, camera):
         if self.backg:
-            global_data.screen.blit(global_data.texture_manager.textures[self.name+'_back'][0], (self.pos[0]+camera[0], self.pos[1]+camera[1]))            
+            global_data.screen.blit(global_data.texture_manager.textures[self.name+'_back'][0], (self.pos[0]+camera[0], self.pos[1]+camera[1]))
+        #if not self.can_walk:
+            #print self.pos[0]+camera[0], self.pos[1]+camera[1], self.rect
         global_data.screen.blit(global_data.texture_manager.textures[self.name][0], (self.pos[0]+camera[0], self.pos[1]+camera[1]), self.rect)
         
 class Map():
@@ -45,7 +47,7 @@ class Map():
             for y in range(self.map_height):
                 line_data = file.readline().split(';')
                 self.tiles[x][y].name = line_data[0]
-                self.tiles[x][y].can_walk = line_data[1]                
+                self.tiles[x][y].can_walk = True if line_data[1] == 'True' else False                
                 self.tiles[x][y].pos_img_x = int(line_data[2]) 
                 self.tiles[x][y].pos_img_y = int(line_data[3])
                 self.tiles[x][y].pos = (int(line_data[4]) + self.camera[0], int(line_data[5]) + self.camera[1])
@@ -77,11 +79,7 @@ class Map():
     def set_camera(self, x, y):
         if x > 0 and self.camera[0] < 0 or x < 0 and (800 - (self.map_width*32)) < self.camera[0]:
             self.camera[0] = (self.camera[0] + x)
-        #elif :            
-        #    self.camera[0] = (self.camera[0] + x)
 
         if y > 0 and self.camera[1] < 0 or y < 0 and (800 - (self.map_height*32)) < self.camera[1]:
             self.camera[1] = (self.camera[1] + y)
-        #elif y < 0 and (800 - (self.map_height*32)) < self.camera[1]:
-        #    self.camera[1] = (self.camera[1] + y)
         

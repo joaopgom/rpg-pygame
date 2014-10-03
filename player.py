@@ -44,10 +44,20 @@ class Player():
             for y in range(4):
                 self.image[skin].append(texture_manager.textures[self.name])
                 self.rect[skin].append(pygame.Rect(25.5*x, 38.25*y, 25.5, 38.25))
-                
+    
+    def walk_change_sprite(self, x, y):
+        if x > 0:
+            self.direction = 1
+        elif x < 0:
+            self.direction = 2
+        
+        if y > 0:
+            self.direction = 3
+        elif y < 0:
+            self.direction = 0
     def move_player(self, x, y):
         self.position[0] += x
         self.position[1] += y
 
     def draw(self):
-        screen.blit(texture_manager.textures[self.name][0], (self.position[0], self.position[1]), self.rect['skin'][9])
+        screen.blit(texture_manager.textures[self.name][0], (self.position[0], self.position[1]), self.rect['skin'][self.direction])
