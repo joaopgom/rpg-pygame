@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 import sys
 import pygame
+from math import ceil
 from pygame import time
 from pygame import event
 from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
@@ -29,24 +30,33 @@ class Game():
     def camera_effect(self, x_axis, y_axis):
         self.player.walk_change_sprite(x_axis, y_axis)
 
-        #print self.player.position[0]+x_axis+self.map.camera[0],  self.player.position[1]+y_axis+self.map.camera[1] 
-
         player_x, player_y = self.player.position[0]+x_axis, self.player.position[1]+y_axis
-        print self.player.position[0]+x_axis+self.map.camera[0], self.player.position[1]+y_axis+self.map.camera[1]
-        #print int(player_x/self.map.map_width), int(player_y/self.map.map_height)
-        if self.map.tiles[int(player_x/self.map.map_width)][int(player_y/self.map.map_height)].can_walk:
-            if self.map.move_camera(x_axis, y_axis):
-                self.map.set_camera(x_axis, y_axis)
-            else:
-                x_axis = x_axis*(-1)
-                y_axis = y_axis*(-1)
-                if x_axis != 0:
-                    if x_axis > 0:
-                        if self.player.position[0] + x_axis > (800-25):
-                            x_axis = 0
-                    else:
-                        if self.player.position[0] + x_axis + 25 < 25:
-                            x_axis = 0
+
+        #x = player_x+((self.map.camera[0]))/32.0 * (-1)
+
+        #print player_x, self.map.camera[0], self.player.position[0]
+        
+        x = (self.map.camera[0] * (-1)) + self.player.position[0] if self.map.camera[0] < 0 else self.map.camera[0] + self.player.position[0]
+        y = (self.map.camera[1] * (-1)) + self.player.position[1] if self.map.camera[1] < 0 else self.map.camera[1] + self.player.position[1]
+        x = (x + 2) if x_axis > 0 else (x + 2)
+        y = (y + 2) if y_axis > 0 else (y + 2)
+        #print x, y
+        #print int(ceil(x)), int(ceil(y))#x, int(ceil(x/32))
+        
+        print int(ceil(y)/32), int(ceil(x)/32), self.map.tiles[int(ceil(y)/32)][int(ceil(x)/32)].can_walk
+        #if self.map.tiles[int(ceil((player_y+(7*y_axis)+(self.map.camera[1]*(-1)))/32))][int(ceil(x))].can_walk:
+        if self.map.move_camera(x_axis, y_axis):
+            self.map.set_camera(x_axis, y_axis)
+        else:
+            x_axis = x_axis*(-1)
+            y_axis = y_axis*(-1)
+            if x_axis != 0:
+                if x_axis > 0:
+                    if self.player.position[0] + x_axis > (800-25):
+                        x_axis = 0
+                else:
+                    if self.player.position[0] + x_axis + 25 < 25:
+                        x_axis = 0
 
                 if y_axis != 0:
                     if y_axis > 0:
@@ -63,6 +73,11 @@ class Game():
         while True:
             for ev in event.get():
                 if ev.type == pygame.QUIT:
+                    for i in range(30):
+                        for j in range(30):
+                           if not self.map.tiles[i][j].can_walk:
+                               print i, j, self.map.tiles[i][j] 
+            
                     pygame.quit()
                     sys.exit()
                 elif ev.type == pygame.KEYDOWN:
