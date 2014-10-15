@@ -31,46 +31,65 @@ class Game():
         self.player.walk_change_sprite(x_axis, y_axis)
 
         player_x, player_y = self.player.position[0]+x_axis, self.player.position[1]+y_axis
-
-        #x = player_x+((self.map.camera[0]))/32.0 * (-1)
-
-        #print player_x, self.map.camera[0], self.player.position[0]
         
         x = (self.map.camera[0] * (-1)) + self.player.position[0] if self.map.camera[0] < 0 else self.map.camera[0] + self.player.position[0]
         y = (self.map.camera[1] * (-1)) + self.player.position[1] if self.map.camera[1] < 0 else self.map.camera[1] + self.player.position[1]
         x = (x + 2) if x_axis > 0 else (x + 2)
         y = (y + 2) if y_axis > 0 else (y + 2)
-        #print x, y
-        #print int(ceil(x)), int(ceil(y))#x, int(ceil(x/32))
         
-        print int(ceil(y)/32), int(ceil(x)/32), self.map.tiles[int(ceil(y)/32)][int(ceil(x)/32)].can_walk
-        #if self.map.tiles[int(ceil((player_y+(7*y_axis)+(self.map.camera[1]*(-1)))/32))][int(ceil(x))].can_walk:
-        if self.map.move_camera(x_axis, y_axis):
-            self.map.set_camera(x_axis, y_axis)
-        else:
-            x_axis = x_axis*(-1)
-            y_axis = y_axis*(-1)
-            if x_axis != 0:
-                if x_axis > 0:
-                    if self.player.position[0] + x_axis > (800-25):
-                        x_axis = 0
-                else:
-                    if self.player.position[0] + x_axis + 25 < 25:
-                        x_axis = 0
-
+        y = int(ceil(y/32))
+        x = int(ceil(x/32))
+        
+        y_sum = 0
+        x_sum = 0
+        
+        if y_axis != 0:
+            y_sum = -1 if y_axis > 0 else 1
+        if x_axis != 0:
+            x_sum = -1 if x_axis > 0 else 1
+        x += x_sum
+        y += y_sum
+        
+        if x < 0:
+            x = 0
+        if x >= len(self.map.tiles[0]):
+            x = len(self.map.tiles[0]) - 1 
+        
+        if y < 0:
+            y = 0
+        if y > len(self.map.tiles):
+            y = len(self.map.tiles)
+        #print x, y, self.map.tiles[y][x].can_walk
+        if self.map.tiles[y][x].can_walk:
+            if self.map.move_camera(x_axis, y_axis):
+                self.map.set_camera(x_axis, y_axis)
+            else:
+                x_axis = x_axis*(-1)
+                y_axis = y_axis*(-1)
+                #print x_axis, y_axis
+                if x_axis != 0:
+                    if x_axis > 0:
+                        if self.player.position[0] + x_axis > (800-25):
+                            x_axis = 0
+                    else:
+                        if self.player.position[0] + x_axis + 25 < 25:
+                            x_axis = 0
+    
                 if y_axis != 0:
                     if y_axis > 0:
-                        if self.player.position[1] + y_axis > (608-38):
+                        print self.player.position[1] + y_axis
+                        if self.player.position[1] + y_axis > (608-38):                                
                             y_axis = 0
                     else:
                         if self.player.position[1] + y_axis + 38 < 38:
-                            y_axis = 0
+                            y_axis = 0                                
     
                 self.player.move_player(x_axis, y_axis)
     
     def main_loop(self):
         pygame.key.set_repeat(1, 10)
         while True:
+            
             for ev in event.get():
                 if ev.type == pygame.QUIT:
                     for i in range(30):
@@ -84,11 +103,11 @@ class Game():
                     self.player_input(pygame.key.get_pressed())            
             self.map.draw_map()
             self.player.draw()
+            self.player.make_move = False
             pygame.display.update()
-            self.time.tick(45)
+            self.time.tick(15)
 
 if __name__ == '__main__':
     pygame.init()
-    #pygame.image.load('images/map/grass.jpg')
     game = Game()
     game.main_loop()
